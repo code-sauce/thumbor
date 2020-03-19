@@ -61,6 +61,7 @@ class ImagingHandler(ContextHandler):
                     % self.context.request.image_url,
                 )
                 return
+        raise Exception('sjain xxx exception - image handler')
 
         url_signature = self.context.request.hash
         if url_signature:
