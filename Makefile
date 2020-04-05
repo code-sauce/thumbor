@@ -30,13 +30,13 @@ integration_run integration int:
 	@pytest -sv integration_tests/ -p no:tldr
 
 pint pintegration:
-	@pytest -sv integration_tests/ -p no:tldr -n `nproc`
+	@pytest -sv integration_tests/ -p no:tldr -n 4
 
 coverage:
 	@coverage report -m --fail-under=10
 
 unit:
-	@pytest -n `nproc` --cov=thumbor tests/
+	@pytest -n 4 --cov=thumbor tests/
 
 kill_redis:
 	@-redis-cli -p 6668 -a hey_you shutdown

@@ -61,7 +61,21 @@ class ImagingHandler(ContextHandler):
                     % self.context.request.image_url,
                 )
                 return
-        raise Exception('sjain xxx exception - image handler')
+
+        if self.context.config.USE_DIMENSIONS_WHITELIST:
+            whitelisted_dimensions_content = await self.get_whitelist_dimensions_contents()
+            whitelisted_dimensions = self.extract_whitelist_dimensions(whitelisted_dimensions_content)
+
+            if whitelisted_dimensions:
+                w = self.context.request.width
+                h = self.context.request.height
+                is_orig_dimension = (w == 0 and h == 0)
+                if (w, h) not in whitelisted_dimensions and not is_orig_dimension:
+                    self._error(
+                        400,
+                        "Source image dimensions %sx%s is not whitelisted"
+                    )
+                    return
 
         url_signature = self.context.request.hash
         if url_signature:

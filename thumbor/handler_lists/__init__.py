@@ -14,6 +14,7 @@ BUILTIN_HANDLERS = [
     "thumbor.handler_lists.healthcheck",
     "thumbor.handler_lists.upload",
     "thumbor.handler_lists.blacklist",
+    "thumbor.handler_lists.whitelist_dimensions",
 ]
 
 HandlerList = _RuleList
