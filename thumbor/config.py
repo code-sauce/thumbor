@@ -217,6 +217,13 @@ Config.define(
 )
 
 Config.define(
+    "USE_DIMENSIONS_WHITELIST",
+    False,
+    "Indicates whether thumbor should enable image dimension "
+    "functionality to prevent serving un-supported image dimensions",
+    "Imaging"
+)
+Config.define(
     "ENGINE_THREADPOOL_SIZE",
     0,
     "Size of the thread pool used for image transformations."
