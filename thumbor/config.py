@@ -115,6 +115,14 @@ Config.define(
     'requests timing out)', 'Imaging')
 
 Config.define(
+    "USE_DIMENSIONS_WHITELIST",
+    False,
+    "Indicates whether thumbor should enable image dimension "
+    "functionality to prevent serving un-supported image dimensions",
+    "Imaging"
+)
+
+Config.define(
     'METRICS', 'thumbor.metrics.logger_metrics',
     'The metrics backend thumbor should use to measure internal actions. This must be the full name of a python module ' +
     '(python must be able to import it)', 'Extensibility')

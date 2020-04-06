@@ -669,8 +669,49 @@ class BaseHandler(tornado.web.RequestHandler):
         else:
             raise tornado.gen.Return("")
 
-    @gen.coroutine
-    def acquire_url_lock(self, url):
+    def extract_whitelist_dimensions(self, blob):
+        """
+        Extracts the dimensions from the new-line separated into a list of (wxh) tuples
+
+        :param blob: The file contents, can be of the form
+        w1xh1
+        w2xh2
+        w3x
+        ....
+        :return: A list of tuples [(w1, h1), (w2, h2), (w3, h3)]
+        """
+
+        whitelisted_dimensions = []
+
+        if not blob:
+            return whitelisted_dimensions
+        lines = blob.split('\n')
+
+        for line in list(filter(lambda x: x, lines)):
+            line = line.strip().lower()
+            # filtering out the empty dimension
+            dimensions = list(filter(lambda d: d, line.split('x')))
+            if len(dimensions) > 2:
+                logger.warning("whitelist dimensions %s not in the form wxh ", line)
+                self._error(400, "Unsupported whitelist dimension  expected wxh, given %s" % line)
+                return
+            if len(dimensions) == 1:
+                w = h = dimensions[0]
+            else:
+                w, h = dimensions
+            whitelisted_dimensions.append((int(w), int(h)))
+        return whitelisted_dimensions
+
+    async def get_whitelist_dimensions_contents(self):
+        filename = "whitelist_dimensions.txt"
+
+        exists = await (self.context.modules.storage.exists(filename))
+        if exists:
+            whitelisted_dimensions = await (self.context.modules.storage.get(filename))
+            return whitelisted_dimensions.decode()
+        return ""
+
+    async def acquire_url_lock(self, url):
         if url not in BaseHandler.url_locks:
             BaseHandler.url_locks[url] = Condition()
         else:
