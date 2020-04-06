@@ -102,10 +102,22 @@ Config.define(
     'Indicates whether thumbor should enable blacklist functionality to prevent processing certain images.', 'Imaging')
 
 Config.define(
-    'ENGINE_THREADPOOL_SIZE', 0,
-    'Size of the thread pool used for image transformations.  The default value is 0 (don\'t use a threadpoool. '
-    'Increase this if you are seeing your IOLoop getting blocked (often indicated by your upstream HTTP '
-    'requests timing out)', 'Imaging')
+    "USE_DIMENSIONS_WHITELIST",
+    False,
+    "Indicates whether thumbor should enable image dimension "
+    "functionality to prevent serving un-supported image dimensions",
+    "Imaging"
+)
+Config.define(
+    "ENGINE_THREADPOOL_SIZE",
+    0,
+    "Size of the thread pool used for image transformations."
+    " The default value is 0 (don't use a threadpoool. "
+    "Increase this if you are seeing your IOLoop getting "
+    "blocked (often indicated by your upstream HTTP "
+    "requests timing out)",
+    "Imaging",
+)
 
 Config.define(
     'METRICS', 'thumbor.metrics.logger_metrics',
