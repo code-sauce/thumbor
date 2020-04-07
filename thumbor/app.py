@@ -11,6 +11,7 @@ import tornado.web
 import tornado.ioloop
 
 from thumbor.handlers.blacklist import BlacklistHandler
+from thumbor.handlers.whitelist_dimensions import WhitelistDimensionsHandler
 from thumbor.handlers.healthcheck import HealthcheckHandler
 from thumbor.handlers.upload import ImageUploadHandler
 from thumbor.handlers.image_resource import ImageResourceHandler
@@ -44,6 +45,11 @@ class ThumborServiceApp(tornado.web.Application):
         if self.context.config.USE_BLACKLIST:
             handlers.append(
                 (r'/blacklist', BlacklistHandler, {'context': self.context})
+            )
+
+        if self.context.config.USE_DIMENSIONS_WHITELIST:
+            handlers.append(
+                (r'/whitelist_dimensions', WhitelistDimensionsHandler, {'context': self.context})
             )
 
         # Imaging handler (GET)

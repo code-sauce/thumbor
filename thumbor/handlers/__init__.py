@@ -323,7 +323,7 @@ class BaseHandler(tornado.web.RequestHandler):
             image_extension = EXTENSION.get(BaseEngine.get_mimetype(buffer), '.jpg')
         else:
             image_extension = context.request.format
-            if image_extension is not None:def get_whitelist_dim
+            if image_extension is not None:
                 image_extension = '.%s' % image_extension
                 logger.debug('Image format specified as %s.' % image_extension)
             elif self.is_webp(context):

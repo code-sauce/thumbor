@@ -35,13 +35,13 @@ class WhitelistDimensionsHandlerTestCase(TestCase):
         return Context(None, cfg, importer)
 
     @gen_test
-    async def test_can_get_whitelist_dimensions(self):
+    def test_can_get_whitelist_dimensions(self):
         response = await self.async_fetch("/whitelist_dimensions")
         expect(response.code).to_equal(200)
         expect(response.body).to_equal("")
 
     @gen_test
-    async def test_can_put_object_to_whitelist_dimensions(self):
+    def test_can_put_object_to_whitelist_dimensions(self):
         response = await self.async_fetch(
             "/whitelist_dimensions?20x30", method="PUT", body=""
         )
@@ -49,14 +49,14 @@ class WhitelistDimensionsHandlerTestCase(TestCase):
         expect(response.body).to_equal("")
 
     @gen_test
-    async def test_can_read_updated_whitelist(self):
+    def test_can_read_updated_whitelist(self):
         await self.async_fetch("/whitelist_dimensions?100x200", method="PUT", body="")
         response = await self.async_fetch("/whitelist_dimensions")
         expect(response.code).to_equal(200)
         expect(b"100x200\n" in response.body).to_equal(True)
 
     @gen_test
-    async def test_can_read_original_size(self):
+    def test_can_read_original_size(self):
         # note the image.jpg is of size 300x400
 
         # whitelist dimensions setting is
@@ -69,7 +69,7 @@ class WhitelistDimensionsHandlerTestCase(TestCase):
         expect(response.code).to_equal(200)
 
     @gen_test
-    async def test_can_read_all_dimensions_if_no_whitelists(self):
+    def test_can_read_all_dimensions_if_no_whitelists(self):
         # whitelist dimensions setting is
         response = await self.async_fetch("/unsafe/image.jpg")
         expect(response.code).to_equal(200)
@@ -81,7 +81,7 @@ class WhitelistDimensionsHandlerTestCase(TestCase):
         expect(response.code).to_equal(200)
 
     @gen_test
-    async def test_can_read_only_whitelisted_dimensions(self):
+    def test_can_read_only_whitelisted_dimensions(self):
 
         await self.async_fetch("/whitelist_dimensions?100x200", method="PUT", body="")
 

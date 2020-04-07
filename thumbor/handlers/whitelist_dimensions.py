@@ -10,19 +10,24 @@
 
 from thumbor.handlers import ContextHandler
 from thumbor.utils import logger
+import tornado
 
 
 class WhitelistDimensionsHandler(ContextHandler):
-    async def get(self):
+
+    @tornado.web.asynchronous
+    @tornado.gen.coroutine
+    def get(self):
         whitelist_dimensions = await self.get_whitelist_dimensions_contents()
 
         self.write(whitelist_dimensions)
         self.set_header("Content-Type", "text/plain")
         self.set_status(200)
 
+    @tornado.web.asynchronous
+    @tornado.gen.coroutine
     async def put(self):
         whitelist_dimensions = await self.get_whitelist_dimensions_contents()
-
         whitelist_dimensions += self.request.query + "\n"
         logger.debug("Adding to whitelist dimensions: %s", self.request.query)
         await self.context.modules.storage.put("whitelist_dimensions.txt", whitelist_dimensions.encode())
