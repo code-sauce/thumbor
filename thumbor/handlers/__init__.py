@@ -710,7 +710,8 @@ class BaseHandler(tornado.web.RequestHandler):
         if exists:
             whitelisted_dimensions = yield gen.maybe_future(self.context.modules.storage.get(filename))
             raise tornado.gen.Return(whitelisted_dimensions)
-        return tornado.gen.Return("")
+        else:
+            raise tornado.gen.Return("")
 
     @gen.coroutine
     def acquire_url_lock(self, url):

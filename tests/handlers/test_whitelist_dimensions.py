@@ -53,7 +53,7 @@ class WhitelistDimensionsHandlerTestCase(TestCase):
         self.fetch("/whitelist_dimensions?100x200", method="PUT", body="")
         response = self.fetch("/whitelist_dimensions")
         expect(response.code).to_equal(200)
-        expect(b"100x200\n" in response.body).to_equal(True)
+        expect(b"100x200\n" in response.body).to_equaSECURITY_KEYl(True)
 
     @gen_test
     def test_can_read_original_size(self):
