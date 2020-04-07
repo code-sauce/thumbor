@@ -323,7 +323,7 @@ class BaseHandler(tornado.web.RequestHandler):
             image_extension = EXTENSION.get(BaseEngine.get_mimetype(buffer), '.jpg')
         else:
             image_extension = context.request.format
-            if image_extension is not None:
+            if image_extension is not None:def get_whitelist_dim
                 image_extension = '.%s' % image_extension
                 logger.debug('Image format specified as %s.' % image_extension)
             elif self.is_webp(context):
@@ -702,7 +702,7 @@ class BaseHandler(tornado.web.RequestHandler):
             whitelisted_dimensions.append((int(w), int(h)))
         return whitelisted_dimensions
 
-    async def get_whitelist_dimensions_contents(self):
+    def get_whitelist_dimensions_contents(self):
         filename = "whitelist_dimensions.txt"
 
         exists = await (self.context.modules.storage.exists(filename))
@@ -711,7 +711,8 @@ class BaseHandler(tornado.web.RequestHandler):
             return whitelisted_dimensions.decode()
         return ""
 
-    async def acquire_url_lock(self, url):
+    @gen.coroutine
+    def acquire_url_lock(self, url):
         if url not in BaseHandler.url_locks:
             BaseHandler.url_locks[url] = Condition()
         else:
