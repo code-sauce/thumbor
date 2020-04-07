@@ -60,7 +60,7 @@ class ImagingHandler(ContextHandler):
                 return
 
         if self.context.config.USE_DIMENSIONS_WHITELIST:
-            whitelisted_dimensions_content = await self.get_whitelist_dimensions_contents()
+            whitelisted_dimensions_content = yield self.get_whitelist_dimensions_contents()
             whitelisted_dimensions = self.extract_whitelist_dimensions(whitelisted_dimensions_content)
 
             if whitelisted_dimensions:

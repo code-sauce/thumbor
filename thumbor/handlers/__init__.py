@@ -702,14 +702,15 @@ class BaseHandler(tornado.web.RequestHandler):
             whitelisted_dimensions.append((int(w), int(h)))
         return whitelisted_dimensions
 
+    @gen.coroutine
     def get_whitelist_dimensions_contents(self):
         filename = "whitelist_dimensions.txt"
 
-        exists = await (self.context.modules.storage.exists(filename))
+        exists = yield gen.maybe_future(self.context.modules.storage.exists(filename))
         if exists:
-            whitelisted_dimensions = await (self.context.modules.storage.get(filename))
-            return whitelisted_dimensions.decode()
-        return ""
+            whitelisted_dimensions = yield gen.maybe_future(self.context.modules.storage.get(filename))
+            raise tornado.gen.Return(whitelisted_dimensions)
+        return tornado.gen.Return("")
 
     @gen.coroutine
     def acquire_url_lock(self, url):

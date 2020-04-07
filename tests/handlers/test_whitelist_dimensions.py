@@ -36,13 +36,13 @@ class WhitelistDimensionsHandlerTestCase(TestCase):
 
     @gen_test
     def test_can_get_whitelist_dimensions(self):
-        response = await self.async_fetch("/whitelist_dimensions")
+        response = self.fetch("/whitelist_dimensions")
         expect(response.code).to_equal(200)
         expect(response.body).to_equal("")
 
     @gen_test
     def test_can_put_object_to_whitelist_dimensions(self):
-        response = await self.async_fetch(
+        response = self.fetch(
             "/whitelist_dimensions?20x30", method="PUT", body=""
         )
         expect(response.code).to_equal(200)
@@ -50,8 +50,8 @@ class WhitelistDimensionsHandlerTestCase(TestCase):
 
     @gen_test
     def test_can_read_updated_whitelist(self):
-        await self.async_fetch("/whitelist_dimensions?100x200", method="PUT", body="")
-        response = await self.async_fetch("/whitelist_dimensions")
+        self.fetch("/whitelist_dimensions?100x200", method="PUT", body="")
+        response = self.fetch("/whitelist_dimensions")
         expect(response.code).to_equal(200)
         expect(b"100x200\n" in response.body).to_equal(True)
 
@@ -60,40 +60,40 @@ class WhitelistDimensionsHandlerTestCase(TestCase):
         # note the image.jpg is of size 300x400
 
         # whitelist dimensions setting is
-        response = await self.async_fetch("/unsafe/image.jpg")
+        response = self.fetch("/unsafe/image.jpg")
         expect(response.code).to_equal(200)
-        await self.async_fetch("/whitelist_dimensions?100x200", method="PUT", body="")
+        self.fetch("/whitelist_dimensions?100x200", method="PUT", body="")
 
         # original size ok
-        response = await self.async_fetch("/unsafe/image.jpg")
+        response = self.fetch("/unsafe/image.jpg")
         expect(response.code).to_equal(200)
 
     @gen_test
     def test_can_read_all_dimensions_if_no_whitelists(self):
         # whitelist dimensions setting is
-        response = await self.async_fetch("/unsafe/image.jpg")
+        response = self.fetch("/unsafe/image.jpg")
         expect(response.code).to_equal(200)
 
-        response = await self.async_fetch("/unsafe/10x/image.jpg")
+        response = self.fetch("/unsafe/10x/image.jpg")
         expect(response.code).to_equal(200)
 
-        response = await self.async_fetch("/unsafe/10x20/image.jpg")
+        response = self.fetch("/unsafe/10x20/image.jpg")
         expect(response.code).to_equal(200)
 
     @gen_test
     def test_can_read_only_whitelisted_dimensions(self):
 
-        await self.async_fetch("/whitelist_dimensions?100x200", method="PUT", body="")
+        self.fetch("/whitelist_dimensions?100x200", method="PUT", body="")
 
-        response = await self.async_fetch("/unsafe/image.jpg")
+        response = self.fetch("/unsafe/image.jpg")
         # original size ok
         expect(response.code).to_equal(200)
 
-        response = await self.async_fetch("/unsafe/10x/image.jpg")
+        response = self.fetch("/unsafe/10x/image.jpg")
         expect(response.code).to_equal(400)
 
-        response = await self.async_fetch("/unsafe/10x20/image.jpg")
+        response = self.fetch("/unsafe/10x20/image.jpg")
         expect(response.code).to_equal(400)
 
-        response = await self.async_fetch("/unsafe/100x200/image.jpg")
+        response = self.fetch("/unsafe/100x200/image.jpg")
         expect(response.code).to_equal(200)

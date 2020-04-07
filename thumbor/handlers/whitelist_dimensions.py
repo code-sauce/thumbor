@@ -18,7 +18,7 @@ class WhitelistDimensionsHandler(ContextHandler):
     @tornado.web.asynchronous
     @tornado.gen.coroutine
     def get(self):
-        whitelist_dimensions = await self.get_whitelist_dimensions_contents()
+        whitelist_dimensions = yield self.get_whitelist_dimensions_contents()
 
         self.write(whitelist_dimensions)
         self.set_header("Content-Type", "text/plain")
@@ -26,9 +26,9 @@ class WhitelistDimensionsHandler(ContextHandler):
 
     @tornado.web.asynchronous
     @tornado.gen.coroutine
-    async def put(self):
-        whitelist_dimensions = await self.get_whitelist_dimensions_contents()
+    def put(self):
+        whitelist_dimensions = yield self.get_whitelist_dimensions_contents()
         whitelist_dimensions += self.request.query + "\n"
         logger.debug("Adding to whitelist dimensions: %s", self.request.query)
-        await self.context.modules.storage.put("whitelist_dimensions.txt", whitelist_dimensions.encode())
+        self.context.modules.storage.put("whitelist_dimensions.txt", whitelist_dimensions.encode())
         self.set_status(200)
